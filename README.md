@@ -1,5 +1,9 @@
 # 🌌 Event Horizon
 
+> ⚠️ **Note:** This project is a work in progress and currently does not have
+> any runnable code. The README outlines the planned structure and development
+> roadmap.
+
 **Event Horizon** is a DIY, event-sourced home automation system built from
 scratch in Python with no third-party libraries.
 
@@ -9,8 +13,6 @@ All state is derived from a sequence of domain events.
 
 No shortcuts. No YAML hell. Just Python.
 
----
-
 ## 🚀 Vision
 
 - Build a minimal **event-sourcing engine** in pure Python
@@ -19,8 +21,6 @@ No shortcuts. No YAML hell. Just Python.
 - Control the system via a **CLI REPL**
 - Evolve into a Pi-powered **home automation brain**
 
----
-
 ## 🛠️ Core Features (MVP)
 
 - [ ] Define event types (e.g. `LightSwitchedOn`, `LightSwitchedOff`)
@@ -28,8 +28,6 @@ No shortcuts. No YAML hell. Just Python.
 - [ ] Rebuild the in-memory state by replaying events
 - [ ] Handle commands like "turn light on/off"
 - [ ] Interactive CLI for controlling and inspecting the system
-
----
 
 ## 📁 Project Structure (WIP)
 
@@ -44,8 +42,6 @@ event-horizon/
 └── README.md
 ```
 
----
-
 ## 🧠 Future Directions
 
 Once the MVP is in place, future expansions might include:
@@ -57,29 +53,49 @@ Once the MVP is in place, future expansions might include:
 - 🌀 **Snapshots & time travel** tools for debugging or rollback
 - 🤖 **Rule engine** for complex logic (e.g. motion + time = lights)
 
----
+## 🧰 Getting Started
 
-## 🧰 Requirements
+### 📦 Requirements
 
 - Python 3.10+
 - No dependencies outside the standard library
 
-While the project currently has no third-party dependencies, it's a good idea
-to use a virtual environment to keep things isolated:
+### 💻 Cloning and Running
+
+Clone the repository:
+
+```bash
+git clone https://github.com/jackheywood/event-horizon.git
+cd event-horizon
+```
+
+Set up a virtual environment (recommended):
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate  # or .venv\Scripts\activate on Windows
 ```
 
----
+Run the app:
+
+```bash
+python app.py
+```
+
+You'll be dropped into a CLI where you can issue commands like:
+
+```text
+>>> on kitchen
+>>> off hallway
+>>> status
+```
+
+> ⚠️ **Note:** These commands are not implemented yet.
 
 ## 🧪 Status
 
 Currently in early development.  
 Jack is building this system one event at a time.
-
----
 
 ## 📜 License
 
