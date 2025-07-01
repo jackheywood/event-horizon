@@ -34,16 +34,16 @@ No shortcuts. No YAML hell. Just Python.
 event-horizon/
 ├── src/
 │   └── event_horizon/
-│       ├── events/                    # Event classes and deserialization
-│       ├── __init__.py                # Package marker
-│       ├── app.py                     # CLI entrypoint
-│       ├── event_store.py             # Append-only file log
-│       ├── state.py                   # State projection logic
-│       └── commands.py                # Command handling
-├── tests/                             # Unit tests
-├── run.py                             # Script entrypoint for running the app
-├── pyproject.toml                     # Poetry/packaging configuration
-├── event_log.jsonl                    # Persistent event log (text-based)
+│       ├── events/           # Event classes and deserialization
+│       ├── __init__.py       # Package marker
+│       ├── app.py            # CLI entrypoint
+│       ├── event_store.py    # Append-only file log
+│       ├── state.py          # State projection logic
+│       └── commands.py       # Command handling
+├── tests/                    # Unit tests
+├── run.py                    # Script entrypoint for running the app
+├── pyproject.toml            # Poetry/packaging configuration
+├── event_log.jsonl           # Persistent event log (text-based)
 └── README.md
 ```
 
