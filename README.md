@@ -34,8 +34,8 @@ No shortcuts. No YAML hell. Just Python.
 ```text
 event-horizon/
 ├── app.py              # CLI entrypoint
+├── events/             # Event classes and deserialization
 ├── event_store.py      # Append-only file log
-├── events.py           # Domain event definitions
 ├── state.py            # State projection logic
 ├── commands.py         # Command handling
 ├── event_log.jsonl     # Persistent event log (text-based)
