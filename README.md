@@ -1,14 +1,13 @@
 # 🌌 Event Horizon
 
-> ⚠️ **Note:** This project is a work in progress and currently does not have
-> any runnable code. The README outlines the planned structure and development
-> roadmap.
+> ⚠️ **Note:** This project is in early development. Most functionality is still
+> being implemented, but the foundation is in place.
 
 **Event Horizon** is a DIY, event-sourced home automation system built from
 scratch in Python with no third-party libraries.
 
-It’s a learning project, a tinkerer’s sandbox, and a long-term plan to
-automate your home from the comfort of a clean, append-only event log.
+It’s a learning project, a tinkerer’s sandbox, and the seed of a long-term plan
+to automate your home from the comfort of a clean, append-only event log.
 All state is derived from a sequence of domain events.
 
 No shortcuts. No YAML hell. Just Python.
@@ -33,12 +32,18 @@ No shortcuts. No YAML hell. Just Python.
 
 ```text
 event-horizon/
-├── app.py              # CLI entrypoint
-├── events/             # Event classes and deserialization
-├── event_store.py      # Append-only file log
-├── state.py            # State projection logic
-├── commands.py         # Command handling
-├── event_log.jsonl     # Persistent event log (text-based)
+├── src/
+│   └── event_horizon/
+│       ├── events/                    # Event classes and deserialization
+│       ├── __init__.py                # Package marker
+│       ├── app.py                     # CLI entrypoint
+│       ├── event_store.py             # Append-only file log
+│       ├── state.py                   # State projection logic
+│       └── commands.py                # Command handling
+├── tests/                             # Unit tests
+├── run.py                             # Script entrypoint for running the app
+├── pyproject.toml                     # Poetry/packaging configuration
+├── event_log.jsonl                    # Persistent event log (text-based)
 └── README.md
 ```
 
@@ -57,8 +62,8 @@ Once the MVP is in place, future expansions might include:
 
 ### 📦 Requirements
 
-- Python 3.10+
-- No dependencies outside the standard library
+- Python 3.12+
+- [Poetry](https://python-poetry.org/docs/#installation) installed
 
 ### 💻 Cloning and Running
 
@@ -69,17 +74,16 @@ git clone https://github.com/jackheywood/event-horizon.git
 cd event-horizon
 ```
 
-Set up a virtual environment (recommended):
+Install dependencies and set up the virtual environment:
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate  # or .venv\Scripts\activate on Windows
+poetry install
 ```
 
 Run the app:
 
 ```bash
-python app.py
+poetry run python run.py
 ```
 
 You'll be dropped into a CLI where you can issue commands like:
@@ -92,7 +96,15 @@ You'll be dropped into a CLI where you can issue commands like:
 
 > ⚠️ **Note:** These commands are not implemented yet.
 
-## 🧪 Status
+### 🧪 Running Tests
+
+To run the unit tests:
+
+```bash
+poetry run pytest
+```
+
+## ⏳ Status
 
 Currently in early development.  
 Jack is building this system one event at a time.

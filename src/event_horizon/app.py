@@ -1,4 +1,4 @@
-from events import deserialize_event
+from src.event_horizon.events import deserialize_event
 
 
 def main():
@@ -17,7 +17,3 @@ def main():
 
     for event in events:
         print(event)
-
-
-if __name__ == "__main__":
-    main()

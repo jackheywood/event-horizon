@@ -12,4 +12,4 @@ class Event:
         }
 
     def __repr__(self):
-        return str(self.to_dict())
+        return f"<{self.__class__.__name__} {self.to_dict()}>"

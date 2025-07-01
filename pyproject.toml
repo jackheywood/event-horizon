@@ -1,0 +1,19 @@
+[project]
+name = "event-horizon"
+version = "0.1.0"
+description = "Event-sourced home automation backend"
+authors = [
+    { name = "Jack Heywood" }
+]
+readme = "README.md"
+requires-python = ">=3.12,<4.0"
+dependencies = ["poetry-core (>=2.0.0,<3.0.0)"]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.1"
+
