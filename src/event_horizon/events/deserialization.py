@@ -1,9 +1,10 @@
 from datetime import datetime
 
-from .base import Event
-from .lights import LightSwitchedOn, LightSwitchedOff
+from .base_event import Event
+from .light_events import LightCreated, LightSwitchedOn, LightSwitchedOff
 
 EVENT_TYPE_MAP = {
+    "LightCreated": LightCreated,
     "LightSwitchedOn": LightSwitchedOn,
     "LightSwitchedOff": LightSwitchedOff,
 }
