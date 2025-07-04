@@ -8,7 +8,7 @@ class LightHandler:
     def __init__(self, event_store: EventStore):
         self.event_store = event_store
 
-    def handle_command(self, command: Command):
+    def handle(self, command: Command):
         if isinstance(command, NewLight):
             aggregate = LightAggregate.create(command.aggregate_id, command.is_on)
             self.event_store.save(aggregate)
