@@ -1,13 +1,22 @@
-from event_horizon.aggregates.light_aggregate import LightAggregate
-
-# Not a real event store just yet, holding aggregates in memory just
-# to prove out the command/handler/event/aggregate pattern
-aggregates = {}
+from event_horizon.aggregates import Aggregate
+from event_horizon.events import Event, deserialize_event
 
 
-def get_aggregate(aggregate_id: str) -> LightAggregate:
-    return aggregates[aggregate_id]
+class EventStore:
+    def __init__(self):
+        self.events = []
 
+    def save(self, aggregate: Aggregate):
+        events = aggregate.get_uncommitted_events()
+        for event in events:
+            event_dict = event.to_dict()
+            self.events.append(event_dict)
+        aggregate.clear_uncommitted_events()
 
-def save_aggregate(aggregate: LightAggregate):
-    aggregates[aggregate.aggregate_id] = aggregate
+    def load(self, aggregate_type: type[Aggregate], event_type: type[Event], aggregate_id: str):
+        events = []
+        for event_json in self.events:
+            event = deserialize_event(event_json)
+            if event.aggregate_id == aggregate_id and isinstance(event, event_type):
+                events.append(event)
+        return aggregate_type.rehydrate(aggregate_id, events)

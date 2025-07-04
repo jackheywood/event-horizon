@@ -5,6 +5,7 @@ from datetime import datetime
 @dataclass(frozen=True)
 class Event:
     timestamp: datetime
+    aggregate_id: str
 
     @property
     def type(self) -> str:
@@ -13,5 +14,6 @@ class Event:
     def to_dict(self) -> dict:
         return {
             "type": self.type,
+            "aggregate_id": self.aggregate_id,
             "timestamp": self.timestamp.isoformat(),
         }

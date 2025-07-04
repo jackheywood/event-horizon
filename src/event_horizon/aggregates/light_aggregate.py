@@ -1,14 +1,25 @@
 from datetime import datetime
 
-from event_horizon.events import LightCreated, LightSwitchedOn, LightSwitchedOff
+from event_horizon.events import LightCreated, LightSwitchedOn, LightSwitchedOff, Event
 from .base_aggregate import Aggregate
 
 
 class LightAggregate(Aggregate):
-    def __init__(self, aggregate_id: str, is_on: bool = False):
+    def __init__(self, aggregate_id: str):
         super().__init__(aggregate_id)
-        self.is_on = None
-        self.raise_event(LightCreated(datetime.now(), aggregate_id, is_on))
+        self.is_on = False
+
+    @classmethod
+    def create(cls, aggregate_id: str, is_on: bool = False):
+        aggregate = cls(aggregate_id)
+        aggregate.raise_event(LightCreated(datetime.now(), aggregate_id, is_on))
+        return aggregate
+
+    @classmethod
+    def rehydrate(cls, aggregate_id: str, events: list[Event]):
+        aggregate = cls(aggregate_id)
+        aggregate.apply_events(events)
+        return aggregate
 
     def turn_on(self):
         self.raise_event(LightSwitchedOn(datetime.now(), self.aggregate_id))

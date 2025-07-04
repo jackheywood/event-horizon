@@ -13,16 +13,29 @@ class Aggregate(ABC):
         self._changes.append(event)
         self.apply(event)
 
-    def get_changes(self):
+    def get_uncommitted_events(self):
         return self._changes.copy()
 
-    def clear_changes(self):
+    def clear_uncommitted_events(self):
         self._changes.clear()
 
-    def replay_events(self, events: list[Event]):
+    def apply_events(self, events: list[Event]):
         for event in events:
             self.apply(event)
 
+    @classmethod
+    @abstractmethod
+    def create(cls, aggregate_id: str, **kwargs):
+        """Creates a new aggregate and raises a creation event"""
+        pass
+
+    @classmethod
+    @abstractmethod
+    def rehydrate(cls, aggregate_id: str, events: list[Event]):
+        """Creates a new aggregate from a list of events"""
+        pass
+
     @abstractmethod
     def apply(self, event: Event):
+        """Appies an event to the aggregate"""
         pass
