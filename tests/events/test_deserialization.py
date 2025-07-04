@@ -9,7 +9,7 @@ from event_horizon.events.light_events import LightCreated, LightSwitchedOn, Lig
 @pytest.fixture
 def event_data():
     return {
-        "event_id": "kitchen",
+        "aggregate_id": "kitchen",
         "timestamp_string": "2025-07-01T17:20:40",
         "timestamp": datetime.fromisoformat("2025-07-01T17:20:40"),
         "is_on": True
@@ -25,7 +25,7 @@ def test_deserialize_light_event(event_data, event_type, expected_class, is_crea
     # Arrange
     data = {
         "type": event_type,
-        "light_id": event_data["event_id"],
+        "aggregate_id": event_data["aggregate_id"],
         "timestamp": event_data["timestamp_string"],
     }
 
@@ -37,7 +37,7 @@ def test_deserialize_light_event(event_data, event_type, expected_class, is_crea
 
     # Assert
     assert isinstance(event, expected_class)
-    assert event.light_id == event_data["event_id"]
+    assert event.aggregate_id == event_data["aggregate_id"]
     assert event.timestamp == event_data["timestamp"]
     if is_created:
         assert event.is_on == event_data["is_on"]
