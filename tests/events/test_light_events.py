@@ -1,60 +1,49 @@
 from datetime import datetime
+from typing import Callable
 
 import pytest
 
-from event_horizon.events import LightCreated, LightSwitchedOn, LightSwitchedOff
+from event_horizon.events import Event, LightCreated, LightSwitchedOn, LightSwitchedOff
 
 
 @pytest.fixture
-def event_data():
-    return {
-        "aggregate_id": "kitchen",
-        "timestamp_string": "2025-07-01T17:20:40",
-        "timestamp": datetime.fromisoformat("2025-07-01T17:20:40"),
-    }
+def timestamp():
+    return datetime.fromisoformat("2025-07-01T17:20:40")
 
 
-def test_light_created_event_to_dict(event_data):
+@pytest.mark.parametrize("event_cls,kwargs,expected_dict", [
+    (
+            LightCreated,
+            {"is_on": True},
+            {"type": "LightCreated", "is_on": True}
+    ),
+    (
+            LightSwitchedOn,
+            {},
+            {"type": "LightSwitchedOn"}
+    ),
+    (
+            LightSwitchedOff,
+            {},
+            {"type": "LightSwitchedOff"}
+    ),
+])
+def test_light_events_to_dict(
+        timestamp: datetime,
+        event_cls: Callable[..., Event],
+        kwargs: dict,
+        expected_dict: dict,
+):
     # Arrange
-    created_event = LightCreated(event_data["timestamp"], event_data["aggregate_id"], True)
+    aggregate_id = "kitchen"
+    event = event_cls(timestamp, aggregate_id, **kwargs)
 
     # Act
-    event_dict = created_event.to_dict()
+    result = event.to_dict()
 
     # Assert
-    assert event_dict == {
-        "type": "LightCreated",
-        "aggregate_id": event_data["aggregate_id"],
-        "timestamp": event_data["timestamp_string"],
-        "is_on": True,
-    }
-
-
-def test_light_switched_on_event_to_dict(event_data):
-    # Arrange
-    on_event = LightSwitchedOn(event_data["timestamp"], event_data["aggregate_id"])
-
-    # Act
-    event_dict = on_event.to_dict()
-
-    # Assert
-    assert event_dict == {
-        "type": "LightSwitchedOn",
-        "aggregate_id": event_data["aggregate_id"],
-        "timestamp": event_data["timestamp_string"],
-    }
-
-
-def test_light_switched_off_event_to_dict(event_data):
-    # Arrange
-    off_event = LightSwitchedOff(event_data["timestamp"], event_data["aggregate_id"])
-
-    # Act
-    event_dict = off_event.to_dict()
-
-    # Assert
-    assert event_dict == {
-        "type": "LightSwitchedOff",
-        "aggregate_id": event_data["aggregate_id"],
-        "timestamp": event_data["timestamp_string"],
+    assert result == {
+        **expected_dict,
+        "aggregate_id": aggregate_id,
+        "timestamp": timestamp.isoformat(),
     }

@@ -7,11 +7,16 @@ from event_horizon.events.light_events import LightCreated, LightSwitchedOn, Lig
 
 
 @pytest.fixture
-def event_data():
+def timestamp():
+    return datetime.fromisoformat("2025-07-01T17:20:40")
+
+
+@pytest.fixture
+def event_data(timestamp):
     return {
         "aggregate_id": "kitchen",
-        "timestamp_string": "2025-07-01T17:20:40",
-        "timestamp": datetime.fromisoformat("2025-07-01T17:20:40"),
+        "timestamp": timestamp,
+        "timestamp_string": timestamp.isoformat(),
         "is_on": True
     }
 
@@ -41,3 +46,31 @@ def test_deserialize_light_event(event_data, event_type, expected_class, is_crea
     assert event.timestamp == event_data["timestamp"]
     if is_created:
         assert event.is_on == event_data["is_on"]
+
+
+def test_deserialize_unknown_event_type_raises():
+    # Arrange
+    data = {"type": "InvalidEvent"}
+
+    # Act
+    with pytest.raises(ValueError) as error:
+        deserialize_event(data)
+
+    # Assert
+    assert str(error.value) == "Unknown event type: InvalidEvent"
+
+
+def test_deserialize_wrong_args_raises(event_data):
+    # Arrange
+    data = {
+        "type": "LightCreated",
+        "light_id": "kitchen",
+        "timestamp": event_data["timestamp_string"],
+    }
+
+    # Act
+    with pytest.raises(ValueError) as error:
+        deserialize_event(data)
+
+    # Assert
+    assert "unexpected keyword argument 'light_id'" in str(error.value)
