@@ -5,7 +5,9 @@ from .base_event import Event
 
 @dataclass(frozen=True)
 class LightEvent(Event):
-    pass
+    @classmethod
+    def category(cls) -> str:
+        return LightEvent.__name__
 
 
 @dataclass(frozen=True)

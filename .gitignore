@@ -8,3 +8,6 @@ __pycache__/
 .venv
 env/
 venv/
+
+# Event sourcing log
+event_log.jsonl

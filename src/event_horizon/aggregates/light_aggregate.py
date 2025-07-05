@@ -29,7 +29,7 @@ class LightAggregate(Aggregate):
 
     def apply(self, event):
         if isinstance(event, LightCreated):
-            if self._created:
+            if self._was_created:
                 raise Exception("Light already created")
             self.is_on = event.is_on
             self._created = True

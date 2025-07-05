@@ -34,16 +34,18 @@ No shortcuts. No YAML hell. Just Python.
 event-horizon/
 ├── src/
 │   └── event_horizon/
-│       ├── events/           # Event classes and deserialization
-│       ├── __init__.py       # Package marker
-│       ├── app.py            # CLI entrypoint
-│       ├── event_store.py    # Append-only file log
-│       ├── state.py          # State projection logic
-│       └── commands.py       # Command handling
-├── tests/                    # Unit tests
-├── run.py                    # Script entrypoint for running the app
-├── pyproject.toml            # Poetry/packaging configuration
-├── event_log.jsonl           # Persistent event log (text-based)
+│       ├── aggregates/            # Domain aggregates (state + behavior)
+│       ├── commands/              # Command data structures
+│       ├── events/                # Event definitions and deserialization logic
+│       ├── handlers/              # Command handlers (map intent to aggregates)
+│       ├── __init__.py            # Package marker
+│       ├── app.py                 # CLI entrypoint
+│       ├── event_repository.py    # Low-level event persistence
+│       └── event_store.py         # Aggregate loading/saving via events
+├── tests/                         # Unit tests
+├── run.py                         # Script entrypoint for running the app
+├── pyproject.toml                 # Build and dependency configuration (Poetry)
+├── event_log.jsonl                # Append-only persistent event log (ignored in Git)
 └── README.md
 ```
 

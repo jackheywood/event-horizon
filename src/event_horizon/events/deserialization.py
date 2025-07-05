@@ -19,6 +19,7 @@ def deserialize_event(data: dict) -> Event:
         raise ValueError(f"Unknown event type: {event_type}")
 
     data["timestamp"] = datetime.fromisoformat(data["timestamp"])
+    data.pop("category")  # Not needed
 
     try:
         return cls(**data)  # type: ignore
