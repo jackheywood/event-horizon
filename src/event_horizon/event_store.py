@@ -15,7 +15,18 @@ class EventStore:
 
     def load(self, aggregate_type: type[Aggregate], event_type: type[Event], aggregate_id: str):
         events = []
+
         for event_dict in self.event_repository.load(event_type.category(), aggregate_id):
             event = deserialize_event(event_dict)
             events.append(event)
+
+        if not events:
+            raise ValueError(f"No events found for {aggregate_type.__name__} with id {aggregate_id}")
+
         return aggregate_type.rehydrate(aggregate_id, events)
+
+    def exists(self, event_type: type[Event], aggregate_id: str):
+        return any(
+            True
+            for _ in self.event_repository.load(event_type.category(), aggregate_id)
+        )
