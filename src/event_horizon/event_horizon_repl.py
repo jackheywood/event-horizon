@@ -2,7 +2,7 @@ from cmd import Cmd
 
 from event_horizon.aggregates import LightAggregate
 from event_horizon.commands import NewLight, TurnOnLight, TurnOffLight
-from event_horizon.event_store import EventStore
+from event_horizon.domain import EventStore
 from event_horizon.events import LightEvent
 from event_horizon.handlers import LightHandler
 

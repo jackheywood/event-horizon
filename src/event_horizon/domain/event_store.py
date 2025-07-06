@@ -1,8 +1,8 @@
 from typing import TypeVar
 
 from event_horizon.aggregates import Aggregate
-from event_horizon.event_repository import EventRepository
 from event_horizon.events import deserialize_event, Event
+from event_horizon.persistence import EventRepository
 
 TAggregate = TypeVar("TAggregate", bound=Aggregate)
 
@@ -10,6 +10,12 @@ TAggregate = TypeVar("TAggregate", bound=Aggregate)
 class EventStore:
     def __init__(self, event_repo: EventRepository):
         self.event_repo = event_repo
+
+    def save(self, aggregate: Aggregate) -> None:
+        events = aggregate.get_uncommitted_events()
+        for event in events:
+            self.event_repo.save(event.to_dict())
+        aggregate.clear_uncommitted_events()
 
     def load_all(
             self,
@@ -24,12 +30,6 @@ class EventStore:
             )
             for aggregate_id, events in sorted(aggregate_events.items())
         ]
-
-    def save(self, aggregate: Aggregate):
-        events = aggregate.get_uncommitted_events()
-        for event in events:
-            self.event_repo.save(event.to_dict())
-        aggregate.clear_uncommitted_events()
 
     def load(
             self,

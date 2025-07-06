@@ -1,7 +1,7 @@
+from event_horizon.domain import EventStore
 from event_horizon.event_horizon_repl import EventHorizonRepl
-from event_horizon.event_repository import EventRepository
-from event_horizon.event_store import EventStore
 from event_horizon.handlers import LightHandler
+from event_horizon.persistence import EventRepository
 
 
 def main():

@@ -1,7 +1,6 @@
 # 🌌 Event Horizon
 
-> ⚠️ **Note:** This project is in early development. Most functionality is still
-> being implemented, but the foundation is in place.
+> ⚠️ **Note:** This project is in early development.
 
 **Event Horizon** is a DIY, event-sourced home automation system built from
 scratch in Python with no third-party libraries.
@@ -9,8 +8,6 @@ scratch in Python with no third-party libraries.
 It’s a learning project, a tinkerer’s sandbox, and the seed of a long-term plan
 to automate your home from the comfort of a clean, append-only event log.
 All state is derived from a sequence of domain events.
-
-No shortcuts. No YAML hell. Just Python.
 
 ## 🚀 Vision
 
@@ -22,11 +19,11 @@ No shortcuts. No YAML hell. Just Python.
 
 ## 🛠️ Core Features (MVP)
 
-- [ ] Define event types (e.g. `LightSwitchedOn`, `LightSwitchedOff`)
-- [ ] Implement a file-based, append-only event store
+- [x] Define event types (e.g. `LightSwitchedOn`, `LightSwitchedOff`)
+- [x] Implement a file-based, append-only event store
 - [ ] Rebuild the in-memory state by replaying events
-- [ ] Handle commands like "turn light on/off"
-- [ ] Interactive CLI for controlling and inspecting the system
+- [x] Handle commands like "turn light on/off"
+- [x] Interactive CLI for controlling and inspecting the system
 
 ## 📁 Project Structure (WIP)
 
@@ -34,18 +31,20 @@ No shortcuts. No YAML hell. Just Python.
 event-horizon/
 ├── src/
 │   └── event_horizon/
-│       ├── aggregates/            # Domain aggregates (state + behavior)
-│       ├── commands/              # Command data structures
-│       ├── events/                # Event definitions and deserialization logic
-│       ├── handlers/              # Command handlers (map intent to aggregates)
-│       ├── __init__.py            # Package marker
-│       ├── app.py                 # CLI entrypoint
-│       ├── event_repository.py    # Low-level event persistence
-│       └── event_store.py         # Aggregate loading/saving via events
-├── tests/                         # Unit tests
-├── run.py                         # Script entrypoint for running the app
-├── pyproject.toml                 # Build and dependency configuration (Poetry)
-├── event_log.jsonl                # Append-only persistent event log (ignored in Git)
+│       ├── aggregates/                # Domain aggregates (state + behavior)
+│       ├── commands/                  # Command data structures
+│       ├── events/                    # Event definitions and deserialization logic
+│       ├── domain/                    # Domain services
+|       │   └── event_store.py         # Aggregate loading/saving via events
+│       ├── handlers/                  # Command handlers (map intent to aggregates)
+|       |-- persistence/               # Infrastructure-level persistence
+|       │   └── event_repository.py    # Low-level event persistence
+│       ├── app.py                     # CLI entrypoint
+│       └── event_horizon_repl.py      # Command line REPL for interacting with the system
+├── tests/                             # Unit tests
+├── run.py                             # Script entrypoint for running the app
+├── pyproject.toml                     # Build and dependency configuration (Poetry)
+├── event_log.jsonl                    # Append-only persistent event log (ignored in Git)
 └── README.md
 ```
 
@@ -91,9 +90,9 @@ poetry run python run.py
 You'll be dropped into a CLI where you can issue commands like:
 
 ```text
->>> on kitchen
->>> off hallway
->>> status
+>>> light on kitchen
+>>> light off hallway
+>>> lights
 ```
 
 > ⚠️ **Note:** These commands are not implemented yet.
@@ -108,8 +107,7 @@ poetry run pytest
 
 ## ⏳ Status
 
-Currently in early development.  
-Jack is building this system one event at a time.
+Currently in early development.
 
 ## 📜 License
 
