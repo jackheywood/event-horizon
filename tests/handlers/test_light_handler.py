@@ -48,6 +48,7 @@ def test_handles_new_light_command():
     # Arrange
     mock_store = MagicMock()
     mock_aggregate = MagicMock()
+    mock_store.exists.return_value = False
 
     with (patch.object(
             LightAggregate,
@@ -64,6 +65,32 @@ def test_handles_new_light_command():
         mock_create.assert_called_once_with("kitchen", True)
 
         mock_store.save.assert_called_once_with(mock_aggregate)
+        mock_store.load.assert_not_called()
+
+        mock_aggregate.turn_on.assert_not_called()
+        mock_aggregate.turn_off.assert_not_called()
+
+
+def test_raises_exception_for_existing_new_light():
+    # Arrange
+    mock_store = MagicMock()
+    mock_aggregate = MagicMock()
+    mock_store.exists.return_value = True
+
+    with (patch.object(LightAggregate, "create") as mock_create):
+        handler = LightHandler(mock_store)
+        command = NewLight("kitchen", True)
+
+        # Act
+        with pytest.raises(Exception) as error:
+            handler.handle(command)
+
+        # Assert
+        assert str(error.value) == "Light with id 'kitchen' already exists"
+
+        mock_create.assert_not_called()
+
+        mock_store.save.assert_not_called()
         mock_store.load.assert_not_called()
 
         mock_aggregate.turn_on.assert_not_called()

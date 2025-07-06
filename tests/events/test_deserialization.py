@@ -15,6 +15,7 @@ def timestamp():
 def event_data(timestamp):
     return {
         "aggregate_id": "kitchen",
+        "category": "LightEvent",
         "timestamp": timestamp,
         "timestamp_string": timestamp.isoformat(),
         "is_on": True
@@ -29,6 +30,7 @@ def event_data(timestamp):
 def test_deserialize_light_event(event_data, event_type, expected_class, is_created):
     # Arrange
     data = {
+        "category": event_data["category"],
         "type": event_type,
         "aggregate_id": event_data["aggregate_id"],
         "timestamp": event_data["timestamp_string"],
@@ -63,6 +65,7 @@ def test_deserialize_unknown_event_type_raises():
 def test_deserialize_wrong_args_raises(event_data):
     # Arrange
     data = {
+        "category": event_data["category"],
         "type": "LightCreated",
         "light_id": "kitchen",
         "timestamp": event_data["timestamp_string"],

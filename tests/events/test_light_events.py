@@ -44,6 +44,7 @@ def test_light_events_to_dict(
     # Assert
     assert result == {
         **expected_dict,
+        "category": "LightEvent",
         "aggregate_id": aggregate_id,
         "timestamp": timestamp.isoformat(),
     }
