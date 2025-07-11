@@ -64,7 +64,7 @@ Once the MVP is in place, future expansions might include:
 ### 📦 Requirements
 
 - Python 3.12+
-- [Poetry](https://python-poetry.org/docs/#installation) installed
+- [`uv`](https://github.com/astral-sh/uv)
 
 ### 💻 Cloning and Running
 
@@ -78,13 +78,14 @@ cd event-horizon
 Install dependencies and set up the virtual environment:
 
 ```bash
-poetry install
+uv sync
+uv pip install -e .
 ```
 
 Run the app:
 
 ```bash
-poetry run python run.py
+uv run run.py
 ```
 
 You'll be dropped into a CLI where you can issue commands like:
