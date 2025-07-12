@@ -9,19 +9,19 @@ class Aggregate(ABC):
         self._changes = []
         self._was_created = False
 
-    def raise_event(self, event: Event):
-        self._changes.append(event)
-        self.apply(event)
-
     def get_uncommitted_events(self):
         return self._changes.copy()
 
     def clear_uncommitted_events(self):
         self._changes.clear()
 
-    def apply_events(self, events: list[Event]):
+    def _raise_event(self, event: Event):
+        self._changes.append(event)
+        self._apply(event)
+
+    def _apply_events(self, events: list[Event]):
         for event in events:
-            self.apply(event)
+            self._apply(event)
 
     @classmethod
     @abstractmethod
@@ -36,6 +36,6 @@ class Aggregate(ABC):
         ...
 
     @abstractmethod
-    def apply(self, event: Event):
+    def _apply(self, event: Event):
         """Appies an event to the aggregate"""
         ...

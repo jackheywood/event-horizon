@@ -12,22 +12,22 @@ class LightAggregate(Aggregate):
     @classmethod
     def create(cls, aggregate_id: str, is_on: bool = False):
         aggregate = cls(aggregate_id)
-        aggregate.raise_event(LightCreated(datetime.now(), aggregate_id, is_on))
+        aggregate._raise_event(LightCreated(datetime.now(), aggregate_id, is_on))
         return aggregate
 
     @classmethod
     def rehydrate(cls, aggregate_id: str, events: list[Event]):
         aggregate = cls(aggregate_id)
-        aggregate.apply_events(events)
+        aggregate._apply_events(events)
         return aggregate
 
     def turn_on(self):
-        self.raise_event(LightSwitchedOn(datetime.now(), self.aggregate_id))
+        self._raise_event(LightSwitchedOn(datetime.now(), self.aggregate_id))
 
     def turn_off(self):
-        self.raise_event(LightSwitchedOff(datetime.now(), self.aggregate_id))
+        self._raise_event(LightSwitchedOff(datetime.now(), self.aggregate_id))
 
-    def apply(self, event):
+    def _apply(self, event):
         if isinstance(event, LightCreated):
             if self._was_created:
                 raise Exception("Light already created")
