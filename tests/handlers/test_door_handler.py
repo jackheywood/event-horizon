@@ -3,17 +3,23 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from event_horizon.aggregates import LightAggregate
-from event_horizon.commands import Command, TurnOnLight, TurnOffLight, NewLight
-from event_horizon.events import LightEvent
-from event_horizon.handlers import LightHandler
+from event_horizon.aggregates import DoorAggregate
+from event_horizon.commands import Command, NewDoor, OpenDoor, CloseDoor
+from event_horizon.events import DoorEvent
+from event_horizon.handlers import DoorHandler
+
+
+@pytest.fixture
+def aggregate_id():
+    return "shed"
 
 
 @pytest.mark.parametrize("command_cls,called,not_called", [
-    (TurnOnLight, "turn_on", "turn_off"),
-    (TurnOffLight, "turn_off", "turn_on"),
+    (OpenDoor, "open", "close"),
+    (CloseDoor, "close", "open"),
 ])
-def test_handles_turn_on_or_off_light_commands(
+def test_handles_opens_or_close_door_commands(
+        aggregate_id: str,
         command_cls: Callable[[str], Command],
         called: str,
         not_called: str,
@@ -23,18 +29,18 @@ def test_handles_turn_on_or_off_light_commands(
     mock_aggregate = MagicMock()
     mock_store.load.return_value = mock_aggregate
 
-    with (patch.object(LightAggregate, "create") as mock_create):
-        handler = LightHandler(mock_store)
-        command = command_cls("kitchen")
+    with (patch.object(DoorAggregate, "create") as mock_create):
+        handler = DoorHandler(mock_store)
+        command = command_cls(aggregate_id)
 
         # Act
         handler.handle(command)
 
         # Assert
         mock_store.load.assert_called_once_with(
-            LightAggregate,
-            LightEvent,
-            "kitchen"
+            DoorAggregate,
+            DoorEvent,
+            aggregate_id
         )
         mock_store.save.assert_called_once_with(mock_aggregate)
 
@@ -44,54 +50,54 @@ def test_handles_turn_on_or_off_light_commands(
         mock_create.assert_not_called()
 
 
-def test_handles_new_light_command():
+def test_handles_new_door_command(aggregate_id):
     # Arrange
     mock_store = MagicMock()
     mock_aggregate = MagicMock()
     mock_store.exists.return_value = False
 
     with (patch.object(
-            LightAggregate,
+            DoorAggregate,
             "create",
             return_value=mock_aggregate)
     as mock_create):
-        handler = LightHandler(mock_store)
-        command = NewLight("kitchen", True)
+        handler = DoorHandler(mock_store)
+        command = NewDoor(aggregate_id, True)
 
         # Act
         handler.handle(command)
 
         # Assert
-        mock_create.assert_called_once_with("kitchen", True)
+        mock_create.assert_called_once_with(aggregate_id, True)
 
         mock_store.save.assert_called_once_with(mock_aggregate)
         mock_store.load.assert_not_called()
 
-        mock_aggregate.turn_on.assert_not_called()
-        mock_aggregate.turn_off.assert_not_called()
+        mock_aggregate.open.assert_not_called()
+        mock_aggregate.close.assert_not_called()
 
 
-def test_raises_exception_for_existing_new_light():
+def test_raises_exception_for_existing_new_door(aggregate_id):
     # Arrange
     mock_store = MagicMock()
     mock_aggregate = MagicMock()
     mock_store.exists.return_value = True
 
-    with (patch.object(LightAggregate, "create") as mock_create):
-        handler = LightHandler(mock_store)
-        command = NewLight("kitchen", True)
+    with (patch.object(DoorAggregate, "create") as mock_create):
+        handler = DoorHandler(mock_store)
+        command = NewDoor(aggregate_id, True)
 
         # Act
         with pytest.raises(Exception) as error:
             handler.handle(command)
 
         # Assert
-        assert str(error.value) == "Light with id 'kitchen' already exists"
+        assert str(error.value) == f"Door with id '{aggregate_id}' already exists"
 
         mock_create.assert_not_called()
 
         mock_store.save.assert_not_called()
         mock_store.load.assert_not_called()
 
-        mock_aggregate.turn_on.assert_not_called()
-        mock_aggregate.turn_off.assert_not_called()
+        mock_aggregate.open.assert_not_called()
+        mock_aggregate.close.assert_not_called()

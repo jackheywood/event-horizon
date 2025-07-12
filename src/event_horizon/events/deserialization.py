@@ -1,12 +1,16 @@
 from datetime import datetime
 
 from .base_event import Event
+from .door_events import DoorCreated, DoorOpened, DoorClosed
 from .light_events import LightCreated, LightSwitchedOn, LightSwitchedOff
 
 EVENT_TYPE_MAP: dict[str, type[Event]] = {
     "LightCreated": LightCreated,
     "LightSwitchedOn": LightSwitchedOn,
     "LightSwitchedOff": LightSwitchedOff,
+    "DoorCreated": DoorCreated,
+    "DoorOpened": DoorOpened,
+    "DoorClosed": DoorClosed,
 }
 
 

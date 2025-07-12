@@ -23,7 +23,7 @@ def test_create_creates_light_aggregate(aggregate_id: str, is_on: bool):
     assert aggregate._was_created is True
 
 
-@freeze_time("2025-07-01T17:20:40")
+@freeze_time("2025-07-01")
 @pytest.mark.parametrize("is_on", [True, False])
 def test_create_raises_created_event(aggregate_id: str, is_on: bool):
     # Act
@@ -37,7 +37,7 @@ def test_create_raises_created_event(aggregate_id: str, is_on: bool):
     assert isinstance(event, LightCreated)
     assert event.aggregate_id == aggregate_id
     assert event.is_on is is_on
-    assert event.timestamp == datetime(2025, 7, 1, 17, 20, 40)
+    assert event.timestamp == datetime(2025, 7, 1)
 
 
 def test_create_already_created_raises_exception(aggregate_id):
@@ -51,7 +51,7 @@ def test_create_already_created_raises_exception(aggregate_id):
         )
 
     # Assert
-    assert str(error.value) == "Light already created"
+    assert str(error.value) == "Light has already been created"
 
 
 def test_rehydrate_plays_events(aggregate_id):
